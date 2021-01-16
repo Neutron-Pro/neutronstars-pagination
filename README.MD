@@ -16,6 +16,11 @@ composer require neutronstars/pagination
 }
 ```
 
+If you want use the css style:
+```html
+<link rel="stylesheet" href="https://raw.githubusercontent.com/Neutron-Pro/neutronstars-pagination/master/exemples/assets/css/style.css">
+```
+
 #Example
 
 ```php

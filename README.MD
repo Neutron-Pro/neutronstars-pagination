@@ -1,7 +1,7 @@
 # Pagination API for PHP
 
-![Example Pagination 1](https://github.com/Neutron-Pro/neutronstars-pagination/tree/master/exemples/assets/img/pagination-1.jpg)
-![Example Pagination 2](https://github.com/Neutron-Pro/neutronstars-pagination/tree/master/exemples/assets/img/pagination-2.jpg)
+![Example Pagination 1](exemples/assets/img/pagination-1.jpg)
+![Example Pagination 2](exemples/assets/img/pagination-2.jpg)
 
 #Installation
 

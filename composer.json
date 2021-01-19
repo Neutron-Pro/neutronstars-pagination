@@ -1,6 +1,7 @@
 {
     "name": "neutronstars/pagination",
     "description": "Pagination library for PHP",
+    "version": "1.0.1",
     "type": "library",
     "authors": [
         {

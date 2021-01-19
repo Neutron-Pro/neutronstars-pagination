@@ -114,7 +114,7 @@ class Pagination
         {
             $html .= $this->buildButtonPage($i, $i == $this->currentPage);
         }
-        if($this->maxPage > $this->options['range'])
+        if($this->maxPage > ($this->options['range']*2))
         {
             if($this->currentPage >= ($this->options['range']*2))
             {
@@ -137,7 +137,7 @@ class Pagination
             }
             for($i = $this->maxPage-($this->options['range']-1); $i <= $this->maxPage; $i++)
             {
-                if($i > $this->currentPage+(($this->options['range']-1)/2))
+                if($i > $this->currentPage+(($this->options['range']-1)/2) && $i > $this->options['range'])
                 {
                     $html .= $this->buildButtonPage($i, $i == $this->currentPage);
                 }

@@ -11,14 +11,14 @@ composer require neutronstars/pagination
 ```json
 {
   "require": {
-    "neutronstars/pagination": ">=1.0.0"
+    "neutronstars/pagination": ">=1.0.*"
   }
 }
 ```
 
 If you want use the css style:
 ```html
-<link rel="stylesheet" href="https://raw.githubusercontent.com/Neutron-Pro/neutronstars-pagination/master/exemples/assets/css/style.css">
+<link rel="stylesheet" href="https://neutron-pro.github.io/neutronstars-pagination/exemples/assets/css/style.css">
 ```
 
 #Example

@@ -95,80 +95,87 @@ class Pagination
         return $options;
     }
 
-    public function toHTML(): string
+    /**
+     * @param PaginatorCallback|callable $callback
+     * @return string
+     */
+    public function toHTML($callback = null): string
     {
+        if($callback == null) {
+            $callback = new DefaultPaginatorCallback($this);
+        }
         if($this->maxPage < 2 && !$this->options['build-empty']) { return ''; }
         $html = '<div class="'.$this->options['css']['parent-class'].'">';
 
         if($this->options['first-last']['active'] && ($this->currentPage > 1 || !$this->options['first-last']['hidden']))
         {
-            $html .= '<a href="'.$this->buildUrl(1).'" class="'.$this->options['css']['first-last-class'].($this->currentPage == 1 ? ' '.$this->options['css']['first-last-class-active'] : '').'">'.$this->options['first-last']['first-content'].'</a>';
+            $html .= $callback(PaginatorCallback::FIRST_PAGE_TYPE, $this->currentPage);
         }
 
         if($this->options['previous-next']['active'] && ($this->currentPage > 1 || !$this->options['previous-next']['hidden']))
         {
-            $html .= '<a href="'.$this->buildUrl(1).'" class="'.$this->options['css']['previous-next-class'].($this->currentPage == 1 ? ' '.$this->options['css']['previous-next-class-active'] : '').'">'.$this->options['previous-next']['previous-content'].'</a>';
+            $html .= $callback(PaginatorCallback::PREVIOUS_PAGE_TYPE, $this->currentPage);
         }
 
         for ($i = 1; ($this->maxPage > ($this->options['range']*2) && $i <= $this->options['range']) || ($this->maxPage <= ($this->options['range']*2) && $i <= $this->maxPage); $i++)
         {
-            $html .= $this->buildButtonPage($i, $i == $this->currentPage);
+            $html .= $callback($i == $this->currentPage ? PaginatorCallback::CURRENT_PAGE_TYPE : PaginatorCallback::PAGE_TYPE, $i);
         }
         if($this->maxPage > ($this->options['range']*2))
         {
             if($this->currentPage >= ($this->options['range']*2))
             {
-                $html .= $this->buildSeparatorPage();
+                $html .= $callback(PaginatorCallback::SEPARATOR_TYPE, $this->currentPage);
             }
             for($i = $this->maxPage-($this->options['range']-1); $i < $this->currentPage-(($this->options['range']-1)/2); $i++)
             {
-                $html .= $this->buildButtonPage($i, false);
+                $html .= $callback(PaginatorCallback::PAGE_TYPE, $i);
             }
             for($i = $this->currentPage - (($this->options['range']-1)/2); $i <= $this->currentPage+(($this->options['range']-1)/2); $i++)
             {
                 if($i > $this->options['range'] && $i <= $this->maxPage)
                 {
-                    $html .= $this->buildButtonPage($i, $i == $this->currentPage);
+                    $html .= $callback($i == $this->currentPage ? PaginatorCallback::CURRENT_PAGE_TYPE : PaginatorCallback::PAGE_TYPE, $i);
                 }
             }
             if($this->maxPage-($this->options['range']-1) > $this->currentPage+((($this->options['range']-1)/2)+1))
             {
-                $html .= $this->buildSeparatorPage();
+                $html .= $callback(PaginatorCallback::SEPARATOR_TYPE, $this->currentPage);
             }
             for($i = $this->maxPage-($this->options['range']-1); $i <= $this->maxPage; $i++)
             {
                 if($i > $this->currentPage+(($this->options['range']-1)/2) && $i > $this->options['range'])
                 {
-                    $html .= $this->buildButtonPage($i, $i == $this->currentPage);
+                    $html .= $callback($i == $this->currentPage ? PaginatorCallback::CURRENT_PAGE_TYPE : PaginatorCallback::PAGE_TYPE, $i);
                 }
             }
         }
 
         if($this->options['previous-next']['active'] && ($this->currentPage < $this->maxPage || !$this->options['previous-next']['hidden']))
         {
-            $html .= '<a href="'.$this->buildUrl($this->maxPage).'" class="'.$this->options['css']['previous-next-class'].($this->currentPage == $this->maxPage ? ' '.$this->options['css']['previous-next-class-active'] : '').'">'.$this->options['previous-next']['next-content'].'</a>';
+            $html .= $callback(PaginatorCallback::NEXT_PAGE_TYPE, $this->currentPage);
         }
 
         if($this->options['first-last']['active'] && ($this->currentPage < $this->maxPage || !$this->options['first-last']['hidden']))
         {
-            $html .= '<a href="'.$this->buildUrl($this->maxPage).'" class="'.$this->options['css']['first-last-class'].($this->currentPage == $this->maxPage ? ' '.$this->options['css']['first-last-class-active'] : '').'">'.$this->options['first-last']['last-content'].'</a>';
+            $html .= $callback(PaginatorCallback::LAST_PAGE_TYPE, $this->currentPage);
         }
         return $html.'</div>';
     }
 
-    private function buildButtonPage($page, $selected): string
-    {
-        return '<a href="'.$this->buildUrl($page).'" class="'.$this->options['css']['child-class'].($selected ? ' '.$this->options['css']['child-class-active'] : '').'">'.$page.'</a>';
-    }
-
-    private function buildUrl(int $page): string
+    public function buildUrl(int $page): string
     {
         return str_replace($this->options['key'], $page, $this->options['url']);
     }
 
-    private function buildSeparatorPage(): string
+    public function getOption(string $key, string $subKey = null)
     {
-        return '<span class="'.$this->options['css']['separator-class'].'">'.$this->options['css']['separator-content'].'</span>';
+        return $subKey == null ? $this->options[$key] : $this->options[$key][$subKey];
+    }
+
+    public function getMaxPage()
+    {
+        return $this->maxPage;
     }
 
     public function __toString(): string

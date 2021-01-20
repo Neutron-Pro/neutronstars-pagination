@@ -11,7 +11,7 @@ composer require neutronstars/pagination
 ```json
 {
   "require": {
-    "neutronstars/pagination": ">=1.0.*"
+    "neutronstars/pagination": ">=1.1.*"
   }
 }
 ```
